@@ -5,18 +5,8 @@ import json
 st.set_page_config(layout = "wide", page_title = "Exam Classifier")
 st.title("Exam Classifier")
 
-TOPICS_DICT = {
-    "formulación" : "formulación",
-    "la transformación química" : "cantidad química",
-    "la estructura del átomo" : "átomo",
-    "enlaces químicos" : "enlace químico",
-    "energía de las reacciones químicas" : "termoquímica",
-    "equilibrio químico" : "equilibrio químico",
-    "equilibrios ácido-base" : "ácido base",
-    "reacciones redox" : "redox",
-    "equilibrios de precipitación" : "solubilidad",
-    "orgánica" : "reactividad orgánica"
-}
+with open("topics.json", mode = "r", encoding = "utf-8") as file:
+    topics_dict = json.load(file)
 
 file = st.file_uploader(label="Selecciona un archivo...", type = ["pdf"])
 
@@ -34,7 +24,7 @@ def parse_text(text):
     for line in text:
         if "tema" in line.lower():
             topic = line.split(":")[1].strip().lower()
-            topic = TOPICS_DICT[topic]
+            topic = topics_dict[topic]
         elif "Ju" in line or "Reserva" in line:
             exercises.append(line[2:])  # remove " · "
         else:
